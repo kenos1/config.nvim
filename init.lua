@@ -100,7 +100,9 @@ pkg.use("navigator", {
   config = function()
     require "navigator".setup {
       lsp = {
-        disable_lsp = { "denols", "hls", "rust-analyzer" }
+        hls = { filetype = {} },
+        denols = { filetype = {} },
+        rust_analyzer = { filetype = {} }
       }
     }
   end
