@@ -1,0 +1,48 @@
+[submodule "plugins/lspconfig"]
+	path = plugins/lspconfig
+	url = https://github.com/neovim/nvim-lspconfig.git
+[submodule "plugins/mini"]
+	path = plugins/mini
+	url = https://github.com/echasnovski/mini.nvim.git
+[submodule "plugins/guess-indent"]
+	path = plugins/guess-indent
+	url = https://github.com/NMAC427/guess-indent.nvim.git
+[submodule "plugins/nvim-treesitter"]
+	path = plugins/nvim-treesitter
+	url = https://github.com/nvim-treesitter/nvim-treesitter
+[submodule "plugins/bg"]
+	path = plugins/bg
+	url = https://github.com/typicode/bg.nvim.git
+[submodule "plugins/lazydev"]
+	path = plugins/lazydev
+	url = https://github.com/folke/lazydev.nvim
+[submodule "plugins/modus"]
+	path = plugins/modus
+	url = https://github.com/miikanissi/modus-themes.nvim
+[submodule "plugins/guihua"]
+	path = plugins/guihua
+	url = https://github.com/ray-x/guihua.lua.git
+[submodule "plugins/navigator"]
+	path = plugins/navigator
+	url = https://github.com/ray-x/navigator.lua
+[submodule "plugins/which-key"]
+	path = plugins/which-key
+	url = https://github.com/folke/which-key.nvim
+[submodule "plugins/galaxyline"]
+	path = plugins/galaxyline
+	url = https://github.com/NTBBloodbath/galaxyline.nvim
+[submodule "plugins/plenary"]
+	path = plugins/plenary
+	url = https://github.com/nvim-lua/plenary.nvim
+[submodule "plugins/telescope"]
+	path = plugins/telescope
+	url = https://github.com/nvim-telescope/telescope.nvim
+[submodule "plugins/rust"]
+	path = plugins/rust
+	url = https://github.com/mrcjkb/rustaceanvim
+[submodule "plugins/haskell"]
+	path = plugins/haskell
+	url = https://github.com/mrcjkb/haskell-tools.nvim
+[submodule "plugins/rainbow-delimiters"]
+	path = plugins/rainbow-delimiters
+	url = https://github.com/HiPhish/rainbow-delimiters.nvim
