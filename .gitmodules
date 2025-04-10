@@ -28,9 +28,6 @@
 [submodule "plugins/which-key"]
 	path = plugins/which-key
 	url = https://github.com/folke/which-key.nvim
-[submodule "plugins/galaxyline"]
-	path = plugins/galaxyline
-	url = https://github.com/NTBBloodbath/galaxyline.nvim
 [submodule "plugins/plenary"]
 	path = plugins/plenary
 	url = https://github.com/nvim-lua/plenary.nvim
@@ -46,3 +43,9 @@
 [submodule "plugins/rainbow-delimiters"]
 	path = plugins/rainbow-delimiters
 	url = https://github.com/HiPhish/rainbow-delimiters.nvim
+[submodule "plugins/snacks"]
+	path = plugins/snacks
+	url = https://github.com/folke/snacks.nvim
+[submodule "plugins/lualine"]
+	path = plugins/lualine
+	url = https://github.com/nvim-lualine/lualine.nvim
