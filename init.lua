@@ -140,6 +140,10 @@ pkg.use("lspconfig", {
                 lspconfig.ts_ls.setup {
                         cmd = { "bun", "x", "--bun", "typescript-language-server", "--stdio" }
                 }
+
+                lspconfig.pylsp.setup {
+                        cmd = { "uvx", "--from", "python-lsp-server", "pylsp" }
+                }
         end
 })
 
