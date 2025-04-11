@@ -1,79 +1,5 @@
-local pkg = {}
-
-local config_dir = vim.fn.stdpath("config")
-
---- @type table
-Loaded_plugins = {}
-
-function pkg.use(name, opts)
-        pcall(function()
-                vim.opt.runtimepath:prepend(config_dir .. "/plugins/" .. name)
-
-                Loaded_plugins[name] = false
-
-                local load_func = function()
-                        if opts.config then
-                                opts.config()
-                        else
-                                local module = require(name)
-                                if module.setup then
-                                        module.setup {}
-                                end
-                        end
-                        Loaded_plugins[name] = true
-                end
-
-                if opts.filetype then
-                        local patterns = {}
-
-                        local fmt_ft = function(ft)
-                                return "*" .. "." .. ft
-                        end
-
-                        if type(opts.filetype) == "string" then
-                                patterns = fmt_ft(opts.filetype)
-                        else
-                                for _, ft in ipairs(opts.filetype) do
-                                        table.insert(patterns, fmt_ft(ft))
-                                end
-                        end
-
-                        vim.api.nvim_create_autocmd({ "BufEnter" }, {
-                                once = true,
-                                pattern = patterns,
-                                callback = load_func
-                        })
-                end
-                if opts.event then
-                        local events = opts.event
-                        if type(opts.event) == "string" then
-                                events = { opts.event }
-                        end
-
-                        vim.api.nvim_create_autocmd(events, {
-                                once = true,
-                                callback = load_func
-                        })
-                        return
-                end
-
-                load_func()
-        end)
-end
-
-vim.api.nvim_create_user_command("PkgList", function()
-        local buf = ""
-        for name, loaded in pairs(Loaded_plugins) do
-                local loaded_str = ""
-                if loaded then
-                        loaded_str = "Loaded"
-                else
-                        loaded_str = "Not Loaded"
-                end
-                buf = buf .. name .. " : " .. loaded_str .. "\n"
-        end
-        vim.print(buf)
-end, {})
+require("pkg")
+Pkg.setup()
 
 local key = {}
 
@@ -84,166 +10,153 @@ vim.opt.clipboard = "unnamedplus"
 vim.opt.tabstop = 4
 vim.opt.expandtab = true
 
-pkg.use("plenary")
-pkg.use("nio")
+Pkg.use("plenary")
+Pkg.use("nio")
+Pkg.use("bg")
 
-pkg.use("bg", {
-        event = "UIEnter",
-        config = function() end
-})
+Pkg.use("modus")
+Pkg.subscribe("modus", function()
+        vim.cmd [[colorscheme modus]]
+end)
+Pkg.load("modus")
 
-pkg.use("modus", {
-        event = "UIEnter",
-        config = function()
-                vim.cmd [[colorscheme modus]]
-        end
-})
-
-pkg.use("mini", {
-        config = function()
-                require "mini.basics".setup {}
-                require "mini.pairs".setup {}
-                require "mini.tabline".setup {}
-                require "mini.cursorword".setup {}
-                require "mini.align".setup {}
-                require "mini.move".setup {}
-                require "mini.surround".setup {}
-                require "mini.comment".setup {}
-                require "mini.bracketed".setup {}
-                require "mini.jump2d".setup {}
-                require "mini.completion".setup {}
-                require "mini.animate".setup {
-                        scroll = {
-                                enable = false
-                        }
+Pkg.use("mini")
+Pkg.subscribe("mini", function()
+        require "mini.basics".setup {}
+        require "mini.pairs".setup {}
+        require "mini.tabline".setup {}
+        require "mini.cursorword".setup {}
+        require "mini.align".setup {}
+        require "mini.move".setup {}
+        require "mini.surround".setup {}
+        require "mini.comment".setup {}
+        require "mini.bracketed".setup {}
+        require "mini.jump2d".setup {}
+        require "mini.completion".setup {}
+        require "mini.animate".setup {
+                scroll = {
+                        enable = false
                 }
-        end
-})
+        }
+end)
+Pkg.load("mini")
 
-pkg.use("guess-indent", {})
+Pkg.use("guess-indent")
+Pkg.setup_plugin("guess-indent", {})
+Pkg.load("guess-indent")
 
-pkg.use("lspconfig", {
-        config = function()
-                local lspconfig = require("lspconfig")
+Pkg.use("lazydev")
+Pkg.setup_plugin("lazydev", {})
+Pkg.use("lspconfig")
+Pkg.subscribe("lspconfig", function()
+        local lspconfig = require("lspconfig")
 
-                vim.diagnostic.config({
-                        virtual_text = true,
-                        update_in_insert = true
-                })
+        vim.diagnostic.config({
+                virtual_text = true,
+                update_in_insert = true
+        })
 
-                key.bind("n", "<leader>ls", "<cmd>LspStart<cr>")
-                key.bind("n", "<leader>lS", "<cmd>LspStop<cr>")
-                key.bind("n", "<leader>lr", "<cmd>LspStop<cr>")
-                key.bind("n", "<leader>ll", "<cmd>LspLog<cr>")
-                key.bind("n", "<leader>li", "<cmd>LspInfo<cr>")
+        key.bind("n", "<leader>ls", "<cmd>LspStart<cr>")
+        key.bind("n", "<leader>lS", "<cmd>LspStop<cr>")
+        key.bind("n", "<leader>lr", "<cmd>LspStop<cr>")
+        key.bind("n", "<leader>ll", "<cmd>LspLog<cr>")
+        key.bind("n", "<leader>li", "<cmd>LspInfo<cr>")
 
-                lspconfig.ts_ls.setup {
-                        cmd = { "bun", "x", "--bun", "typescript-language-server", "--stdio" }
+        lspconfig.ts_ls.setup {
+                cmd = { "bun", "x", "--bun", "typescript-language-server", "--stdio" }
+        }
+
+        lspconfig.pylsp.setup {
+                cmd = { "uvx", "--from", "python-lsp-server", "pylsp" }
+        }
+
+        Pkg.load("lazydev")
+end)
+Pkg.load("lspconfig")
+
+Pkg.use("dap")
+Pkg.use("dap-ui")
+Pkg.use("dap-python")
+Pkg.setup_plugin("dap-python", "uv")
+Pkg.load("dap-python")
+
+Pkg.use("rainbow-delimiters")
+Pkg.setup_plugin("rainbow-delimiters", {})
+Pkg.use("nvim-treesitter")
+Pkg.subscribe("nvim-treesitter", function()
+        require "nvim-treesitter.configs".setup {
+                ensure_installed = { "lua", "vimdoc", "c", "cpp", "javascript", "typescript" },
+                auto_install = true,
+                sync_install = false,
+                ignore_install = {},
+                modules = {},
+                highlight = {
+                        enable = true
                 }
+        }
+        Pkg.load("rainbow-delimiters")
+end)
 
-                lspconfig.pylsp.setup {
-                        cmd = { "uvx", "--from", "python-lsp-server", "pylsp" }
-                }
-        end
+
+Pkg.use("navigator")
+Pkg.setup_plugin("navigator", {
+        lsp = {
+                hls = { filetype = {} },
+                denols = { filetype = {} },
+                rust_analyzer = { filetype = {} }
+        }
 })
+Pkg.use("guihua")
+Pkg.setup_plugin("guihua", {})
+Pkg.subscribe("guihua", function()
+        Pkg.load("navigator")
+end)
+Pkg.load("guihua")
 
-pkg.use("dap")
+Pkg.use("telescope")
+Pkg.subscribe("telescope", function()
+        local telescope = require("telescope")
+        local builtin = require("telescope.builtin")
 
-pkg.use("dap-python", {
-        config = function()
-                require("dap-python").setup("uv")
-        end
+        key.bind("n", "<leader>tf", builtin.find_files)
+        key.bind("n", "<leader>tl", builtin.live_grep)
+        key.bind("n", "<leader>th", builtin.help_tags)
+        key.bind("n", "<leader>tb", builtin.buffers)
+end)
+Pkg.load("telescope")
+
+Pkg.use("which-key")
+Pkg.setup_plugin("which-key", {
+        preset = "helix"
 })
+Pkg.load_on_event("which-key", "UIEnter")
 
-pkg.use("dap-ui")
+Pkg.use("rust")
+Pkg.use("haskell")
 
-
-pkg.use("lazydev", {
-        filetype = "lua"
+Pkg.use("snacks")
+Pkg.setup_plugin("snacks", {
+        terminal = {},
+        bigfile = {},
+        indent = {},
+        input = {},
+        toggle = {}
 })
+Pkg.load("snacks")
 
-pkg.use("nvim-treesitter", {
-        config = function()
-                require "nvim-treesitter.configs".setup {
-                        ensure_installed = { "lua", "vimdoc", "c", "cpp", "javascript", "typescript" },
-                        auto_install = true,
-                        sync_install = false,
-                        ignore_install = {},
-                        modules = {},
-                        highlight = {
-                                enable = true
-                        }
-                }
-        end
+Pkg.use("lualine")
+Pkg.setup_plugin("lualine", {
+        options = {
+                component_separators = { left = '', right = '' },
+                section_separators = { left = '', right = '' },
+        },
+        sections = {
+                lualine_a = {},
+                lualine_b = {},
+                lualine_c = { "mode", "filename" },
+                lualine_x = { "filesize", "filetype", "branch", "lsp_status" },
+                lualine_y = {},
+                lualine_z = {}
+        }
 })
-
-pkg.use("rainbow-delimiters", {})
-
-pkg.use("guihua", {})
-pkg.use("navigator", {
-        config = function()
-                require "navigator".setup {
-                        lsp = {
-                                hls = { filetype = {} },
-                                denols = { filetype = {} },
-                                rust_analyzer = { filetype = {} }
-                        }
-                }
-        end
-})
-
-pkg.use("telescope", {
-        config = function()
-                local telescope = require("telescope")
-                local builtin = require("telescope.builtin")
-
-                key.bind("n", "<leader>tf", builtin.find_files)
-                key.bind("n", "<leader>tl", builtin.live_grep)
-                key.bind("n", "<leader>th", builtin.help_tags)
-                key.bind("n", "<leader>tb", builtin.buffers)
-        end
-})
-
-pkg.use("which-key", {
-        event = "UIEnter",
-        config = function()
-                require("which-key").setup {
-                        preset = "helix"
-                }
-        end
-})
-
-pkg.use("rust", {})
-pkg.use("haskell", {})
-
-pkg.use("snacks", {
-        config = function()
-                require("snacks").setup {
-                        terminal = {},
-                        bigfile = {},
-                        indent = {},
-                        input = {},
-                        toggle = {}
-                }
-        end
-})
-
-pkg.use("lualine", {
-        event = "UIEnter",
-        config = function()
-                require("lualine").setup {
-                        options = {
-                                component_separators = { left = '', right = '' },
-                                section_separators = { left = '', right = '' },
-                        },
-                        sections = {
-                                lualine_a = {},
-                                lualine_b = {},
-                                lualine_c = { "mode", "filename" },
-                                lualine_x = { "filesize", "filetype", "branch", "lsp_status" },
-                                lualine_y = {},
-                                lualine_z = {}
-                        }
-                }
-        end
-})
+Pkg.load_on_event("lualine", "UIEnter")
