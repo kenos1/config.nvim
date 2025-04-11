@@ -12,7 +12,6 @@ function pkg.use(name, opts)
                 Loaded_plugins[name] = false
 
                 local load_func = function()
-                        Loaded_plugins[name] = true
                         if opts.config then
                                 opts.config()
                         else
@@ -21,8 +20,30 @@ function pkg.use(name, opts)
                                         module.setup {}
                                 end
                         end
+                        Loaded_plugins[name] = true
                 end
 
+                if opts.filetype then
+                        local patterns = {}
+
+                        local fmt_ft = function(ft)
+                                return "*" .. "." .. ft
+                        end
+
+                        if type(opts.filetype) == "string" then
+                                patterns = fmt_ft(opts.filetype)
+                        else
+                                for _, ft in ipairs(opts.filetype) do
+                                        table.insert(patterns, fmt_ft(ft))
+                                end
+                        end
+
+                        vim.api.nvim_create_autocmd({ "BufEnter" }, {
+                                once = true,
+                                pattern = patterns,
+                                callback = load_func
+                        })
+                end
                 if opts.event then
                         local events = opts.event
                         if type(opts.event) == "string" then
@@ -63,11 +84,16 @@ vim.opt.clipboard = "unnamedplus"
 vim.opt.tabstop = 4
 vim.opt.expandtab = true
 
+pkg.use("plenary")
+pkg.use("nio")
+
 pkg.use("bg", {
+        event = "UIEnter",
         config = function() end
 })
 
 pkg.use("modus", {
+        event = "UIEnter",
         config = function()
                 vim.cmd [[colorscheme modus]]
         end
@@ -117,8 +143,20 @@ pkg.use("lspconfig", {
         end
 })
 
+pkg.use("dap")
 
-pkg.use("lazydev", {})
+pkg.use("dap-python", {
+        config = function()
+                require("dap-python").setup("uv")
+        end
+})
+
+pkg.use("dap-ui")
+
+
+pkg.use("lazydev", {
+        filetype = "lua"
+})
 
 pkg.use("nvim-treesitter", {
         config = function()
@@ -148,10 +186,6 @@ pkg.use("navigator", {
                         }
                 }
         end
-})
-
-pkg.use("plenary", {
-        config = function() end
 })
 
 pkg.use("telescope", {
@@ -191,6 +225,7 @@ pkg.use("snacks", {
 })
 
 pkg.use("lualine", {
+        event = "UIEnter",
         config = function()
                 require("lualine").setup {
                         options = {

@@ -49,3 +49,15 @@
 [submodule "plugins/lualine"]
 	path = plugins/lualine
 	url = https://github.com/nvim-lualine/lualine.nvim
+[submodule "plugins/dap"]
+	path = plugins/dap
+	url = https://github.com/mfussenegger/nvim-dap
+[submodule "plugins/dap-python"]
+	path = plugins/dap-python
+	url = https://github.com/mfussenegger/nvim-dap-python
+[submodule "plugins/nio"]
+	path = plugins/nio
+	url = https://github.com/nvim-neotest/nvim-nio
+[submodule "plugins/dap-ui"]
+	path = plugins/dap-ui
+	url = https://github.com/rcarriga/nvim-dap-ui
