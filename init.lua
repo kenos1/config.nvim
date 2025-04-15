@@ -159,8 +159,17 @@ Pkg.setup_plugin("snacks", {
         indent = {},
         input = {},
         toggle = {},
-        image = {}
+        image = {},
+        zen = {},
+        styles = {
+                zen = {
+                        backdrop = { transparent = false }
+                }
+        }
 })
+Pkg.subscribe("snacks", function()
+        key.bind("n", [[\z]], function() Snacks.zen() end)
+end)
 Pkg.load("snacks")
 
 Pkg.use("lualine")
