@@ -140,6 +140,15 @@ Pkg.use("vimtex")
 Pkg.subscribe("vimtex", function()
         vim.g.vimtex_compiler_method = "tectonic"
         vim.g.vimtex_view_method = "zathura"
+
+        vim.api.nvim_create_autocmd("BufWritePost", {
+                command = [[VimtexCompile]],
+                pattern = { "*tex" }
+        })
+        vim.api.nvim_create_autocmd("BufEnter", {
+                command = [[setlocal conceallevel=2]],
+                pattern = { "*tex" }
+        })
 end)
 Pkg.load("vimtex")
 
