@@ -38,12 +38,26 @@ Pkg.subscribe("mini", function()
                         enable = false
                 }
         }
+
+        Pkg.use("friendly-snippets")
+        local snippets = require "mini.snippets"
+        local gen_loader = snippets.gen_loader
+        vim.opt.runtimepath:prepend(vim.fn.stdpath("config") .. "/snippets/")
+        snippets.setup {
+                snippets = {
+                        gen_loader.from_lang()
+                }
+        }
 end)
 Pkg.load("mini")
 
 Pkg.use("guess-indent")
 Pkg.setup_plugin("guess-indent", {})
 Pkg.load("guess-indent")
+
+Pkg.use("better_escape")
+Pkg.setup_plugin("better_escape", {})
+Pkg.load("better_escape")
 
 Pkg.use("lazydev")
 Pkg.setup_plugin("lazydev", {})
@@ -120,7 +134,9 @@ Pkg.subscribe("telescope", function()
         local telescope = require("telescope")
         local builtin = require("telescope.builtin")
 
+        key.bind("n", "<leader><leader>", builtin.find_files)
         key.bind("n", "<leader>tf", builtin.find_files)
+        key.bind("n", "<leader>tt", "Telescope")
         key.bind("n", "<leader>tl", builtin.live_grep)
         key.bind("n", "<leader>th", builtin.help_tags)
         key.bind("n", "<leader>tb", builtin.buffers)
@@ -146,7 +162,10 @@ Pkg.subscribe("vimtex", function()
                 pattern = { "*tex" }
         })
         vim.api.nvim_create_autocmd("BufEnter", {
-                command = [[setlocal conceallevel=2]],
+                command = [[
+                        setlocal conceallevel=2
+                        setlocal spell
+                ]],
                 pattern = { "*tex" }
         })
 end)

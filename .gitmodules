@@ -64,3 +64,9 @@
 [submodule "plugins/vimtex"]
 	path = plugins/vimtex
 	url = https://github.com/lervag/vimtex.git
+[submodule "plugins/friendly-snippets"]
+	path = plugins/friendly-snippets
+	url = https://github.com/rafamadriz/friendly-snippets
+[submodule "plugins/better_escape"]
+	path = plugins/better_escape
+	url = https://github.com/max397574/better-escape.nvim
