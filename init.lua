@@ -70,6 +70,8 @@ Pkg.subscribe("lspconfig", function()
                 cmd = { "uvx", "--from", "python-lsp-server", "pylsp" }
         }
 
+        lspconfig.texlab.setup {}
+
         Pkg.load("lazydev")
 end)
 Pkg.load("lspconfig")
@@ -134,13 +136,21 @@ Pkg.load_on_event("which-key", "UIEnter")
 Pkg.use("rust")
 Pkg.use("haskell")
 
+Pkg.use("vimtex")
+Pkg.subscribe("vimtex", function()
+        vim.g.vimtex_compiler_method = "tectonic"
+        vim.g.vimtex_view_method = "zathura"
+end)
+Pkg.load("vimtex")
+
 Pkg.use("snacks")
 Pkg.setup_plugin("snacks", {
         terminal = {},
         bigfile = {},
         indent = {},
         input = {},
-        toggle = {}
+        toggle = {},
+        image = {}
 })
 Pkg.load("snacks")
 

@@ -61,3 +61,6 @@
 [submodule "plugins/dap-ui"]
 	path = plugins/dap-ui
 	url = https://github.com/rcarriga/nvim-dap-ui
+[submodule "plugins/vimtex"]
+	path = plugins/vimtex
+	url = https://github.com/lervag/vimtex.git
