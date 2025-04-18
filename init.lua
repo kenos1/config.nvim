@@ -59,8 +59,6 @@ Pkg.use("better_escape")
 Pkg.setup_plugin("better_escape", {})
 Pkg.load("better_escape")
 
-Pkg.use("lazydev")
-Pkg.setup_plugin("lazydev", {})
 Pkg.use("lspconfig")
 Pkg.subscribe("lspconfig", function()
         local lspconfig = require("lspconfig")
@@ -86,9 +84,13 @@ Pkg.subscribe("lspconfig", function()
 
         lspconfig.texlab.setup {}
 
-        Pkg.load("lazydev")
+        lspconfig.lua_ls.setup {}
 end)
 Pkg.load("lspconfig")
+
+Pkg.use("lazydev")
+Pkg.setup_plugin("lazydev", {})
+Pkg.load("lazydev")
 
 Pkg.use("dap")
 Pkg.use("dap-ui")
@@ -113,21 +115,21 @@ Pkg.subscribe("nvim-treesitter", function()
         Pkg.load("rainbow-delimiters")
 end)
 
-
-Pkg.use("navigator")
-Pkg.setup_plugin("navigator", {
-        lsp = {
-                hls = { filetype = {} },
-                denols = { filetype = {} },
-                rust_analyzer = { filetype = {} }
+Pkg.use("lspsaga")
+Pkg.setup_plugin("lspsaga", {
+        outline = {
+                layout = "float"
+        },
+        ui = {
+                enabled = false
         }
 })
-Pkg.use("guihua")
-Pkg.setup_plugin("guihua", {})
-Pkg.subscribe("guihua", function()
-        Pkg.load("navigator")
+Pkg.subscribe("lspsaga", function()
+        key.bind("n", "<leader>lo", "<cmd>Lspsaga outline<cr>")
+        key.bind("n", "<leader>r", "<cmd>Lspsaga rename<cr>")
+        key.bind("n", "<leader>a", "<cmd>Lspsaga code_action<cr>")
 end)
-Pkg.load("guihua")
+Pkg.load("lspsaga")
 
 Pkg.use("telescope")
 Pkg.subscribe("telescope", function()

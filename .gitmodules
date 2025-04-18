@@ -19,12 +19,6 @@
 [submodule "plugins/modus"]
 	path = plugins/modus
 	url = https://github.com/miikanissi/modus-themes.nvim
-[submodule "plugins/guihua"]
-	path = plugins/guihua
-	url = https://github.com/ray-x/guihua.lua.git
-[submodule "plugins/navigator"]
-	path = plugins/navigator
-	url = https://github.com/ray-x/navigator.lua
 [submodule "plugins/which-key"]
 	path = plugins/which-key
 	url = https://github.com/folke/which-key.nvim
@@ -70,3 +64,6 @@
 [submodule "plugins/better_escape"]
 	path = plugins/better_escape
 	url = https://github.com/max397574/better-escape.nvim
+[submodule "plugins/lspsaga"]
+	path = plugins/lspsaga
+	url = https://github.com/nvimdev/lspsaga.nvim

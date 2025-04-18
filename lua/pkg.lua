@@ -84,6 +84,13 @@ function Pkg.setup()
 
                 print(buffer)
         end, {})
+
+        vim.api.nvim_create_user_command("PkgInstall", function()
+                vim.system({"git", "submodule", "update", "--init", "--recursive"}, {
+                        cwd = vim.fn.stdpath("config")
+                })
+                vim.cmd[[helptags ALL]]
+        end, {})
 end
 
 return Pkg
