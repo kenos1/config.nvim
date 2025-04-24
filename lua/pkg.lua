@@ -85,12 +85,28 @@ function Pkg.setup()
                 print(buffer)
         end, {})
 
-        vim.api.nvim_create_user_command("PkgInstall", function()
+        vim.api.nvim_create_user_command("PkgUpdate", function()
                 vim.system({"git", "submodule", "update", "--init", "--recursive"}, {
                         cwd = vim.fn.stdpath("config")
                 })
                 vim.cmd[[helptags ALL]]
         end, {})
+
+        vim.api.nvim_create_user_command("PkgAdd", function(args)
+                local github = args.fargs[1]
+                local alias = args.fargs[2]
+
+                if not alias then
+                        alias = string.gsub(github, ".+/", "")
+                end
+
+                local url = "https://github.com/" .. github .. ".git"
+
+                vim.system({"git", "submodule", "add", url, "plugins/" .. alias}, {
+                        cwd = vim.fn.stdpath("config")
+                })
+                vim.print("Installed " .. url .. " as " .. alias)
+	end, { nargs = "+" })
 end
 
 return Pkg

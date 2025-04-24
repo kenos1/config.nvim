@@ -67,3 +67,6 @@
 [submodule "plugins/lspsaga"]
 	path = plugins/lspsaga
 	url = https://github.com/nvimdev/lspsaga.nvim
+[submodule "plugins/lint"]
+	path = plugins/lint
+	url = https://github.com/mfussenegger/nvim-lint.git

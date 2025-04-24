@@ -22,6 +22,16 @@ Pkg.load("modus")
 
 Pkg.use("mini")
 Pkg.subscribe("mini", function()
+        Pkg.use("friendly-snippets")
+        local snippets = require "mini.snippets"
+        local gen_loader = snippets.gen_loader
+        vim.opt.runtimepath:prepend(vim.fn.stdpath("config") .. "/snippets/")
+        snippets.setup {
+                snippets = {
+                        gen_loader.from_lang()
+                }
+        }
+
         require "mini.basics".setup {}
         require "mini.pairs".setup {}
         require "mini.tabline".setup {}
@@ -32,6 +42,7 @@ Pkg.subscribe("mini", function()
         require "mini.comment".setup {}
         require "mini.bracketed".setup {}
         require "mini.jump2d".setup {}
+        require "mini.files".setup {}
         require "mini.completion".setup {}
         require "mini.animate".setup {
                 scroll = {
@@ -39,15 +50,7 @@ Pkg.subscribe("mini", function()
                 }
         }
 
-        Pkg.use("friendly-snippets")
-        local snippets = require "mini.snippets"
-        local gen_loader = snippets.gen_loader
-        vim.opt.runtimepath:prepend(vim.fn.stdpath("config") .. "/snippets/")
-        snippets.setup {
-                snippets = {
-                        gen_loader.from_lang()
-                }
-        }
+        key.bind("n", "<leader>e", MiniFiles.open)
 end)
 Pkg.load("mini")
 
@@ -75,7 +78,19 @@ Pkg.subscribe("lspconfig", function()
         key.bind("n", "<leader>li", "<cmd>LspInfo<cr>")
 
         lspconfig.ts_ls.setup {
-                cmd = { "bun", "x", "--bun", "typescript-language-server", "--stdio" }
+                cmd = { "bunx", "--bun", "typescript-language-server", "--stdio" }
+        }
+
+        lspconfig.html.setup {
+                cmd = { "bunx", "--bun", "vscode-html-language-server", "--stdio" }
+        }
+
+        lspconfig.cssls.setup {
+                cmd = { "bunx", "--bun", "vscode-css-language-server", "--stdio" }
+        }
+
+        lspconfig.jsonls.setup {
+                cmd = { "bunx", "--bun", "vscode-json-language-server", "--stdio" }
         }
 
         lspconfig.pylsp.setup {
@@ -91,6 +106,21 @@ Pkg.load("lspconfig")
 Pkg.use("lazydev")
 Pkg.setup_plugin("lazydev", {})
 Pkg.load("lazydev")
+
+Pkg.use("lint")
+Pkg.subscribe("lint", function()
+        local lint = require("lint")
+        lint.linters_by_ft = {
+                bash = { "bash", "shellcheck" }
+        }
+
+        vim.api.nvim_create_autocmd({ "BufWritePost" }, {
+                callback = function()
+                        lint.try_lint()
+                end
+        })
+end)
+Pkg.load("lint")
 
 Pkg.use("dap")
 Pkg.use("dap-ui")
