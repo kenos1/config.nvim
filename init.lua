@@ -93,11 +93,25 @@ Pkg.subscribe("lspconfig", function()
                 cmd = { "bunx", "--bun", "vscode-json-language-server", "--stdio" }
         }
 
+        lspconfig.bashls.setup {
+                cmd = { "bunx", "--bun", "bash-language-server", "start" }
+        }
+
         lspconfig.pylsp.setup {
                 cmd = { "uvx", "--from", "python-lsp-server", "pylsp" }
         }
 
+        lspconfig.clangd.setup {}
+
         lspconfig.texlab.setup {}
+
+        lspconfig.tinymist.setup {
+                settings = {
+                        formatter = "typstyle",
+                        exportPdf = "onType",
+                        semanticTokens = "disable"
+                }
+        }
 
         lspconfig.lua_ls.setup {}
 end)
