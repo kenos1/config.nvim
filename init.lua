@@ -101,10 +101,6 @@ Pkg.subscribe("lspconfig", function()
                 cmd = { "uvx", "--from", "python-lsp-server", "pylsp" }
         }
 
-        lspconfig.clangd.setup {}
-
-        lspconfig.texlab.setup {}
-
         lspconfig.tinymist.setup {
                 settings = {
                         formatter = "typstyle",
@@ -113,7 +109,11 @@ Pkg.subscribe("lspconfig", function()
                 }
         }
 
-        lspconfig.lua_ls.setup {}
+        vim.lsp.config("clangd", {})
+        vim.lsp.config("texlab", {})
+        vim.lsp.config("lua_ls", {})
+
+        vim.lsp.enable({"clangd", "texlab", "lua_ls"})
 end)
 Pkg.load("lspconfig")
 
@@ -172,6 +172,11 @@ Pkg.subscribe("lspsaga", function()
         key.bind("n", "<leader>lo", "<cmd>Lspsaga outline<cr>")
         key.bind("n", "<leader>r", "<cmd>Lspsaga rename<cr>")
         key.bind("n", "<leader>a", "<cmd>Lspsaga code_action<cr>")
+        key.bind("n", "gL", "<cmd>Lspsaga show_line_diagnostics<cr>")
+        key.bind("n", "gd", "<cmd>Lspsaga goto_definition<cr>")
+        key.bind("n", "gt", "<cmd>Lspsaga goto_type_definition<cr>")
+        key.bind("n", "gp", "<cmd>Lspsaga peek_definition<cr>")
+        key.bind("n", "gP", "<cmd>Lspsaga peek_type_definition<cr>")
 end)
 Pkg.load("lspsaga")
 
