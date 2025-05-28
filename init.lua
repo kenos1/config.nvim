@@ -64,8 +64,6 @@ Pkg.load("better_escape")
 
 Pkg.use("lspconfig")
 Pkg.subscribe("lspconfig", function()
-        local lspconfig = require("lspconfig")
-
         vim.diagnostic.config({
                 virtual_text = true,
                 update_in_insert = true
@@ -77,43 +75,54 @@ Pkg.subscribe("lspconfig", function()
         key.bind("n", "<leader>ll", "<cmd>LspLog<cr>")
         key.bind("n", "<leader>li", "<cmd>LspInfo<cr>")
 
-        lspconfig.ts_ls.setup {
+        vim.lsp.config("ts_ls", {
                 cmd = { "bunx", "--bun", "typescript-language-server", "--stdio" }
-        }
+        })
 
-        lspconfig.html.setup {
+        vim.lsp.config("html", {
                 cmd = { "bunx", "--bun", "vscode-html-language-server", "--stdio" }
-        }
+        })
 
-        lspconfig.cssls.setup {
+        vim.lsp.config("cssls", {
                 cmd = { "bunx", "--bun", "vscode-css-language-server", "--stdio" }
-        }
+        })
 
-        lspconfig.jsonls.setup {
+        vim.lsp.config("jsonls", {
                 cmd = { "bunx", "--bun", "vscode-json-language-server", "--stdio" }
-        }
+        })
 
-        lspconfig.bashls.setup {
-                cmd = { "bunx", "--bun", "bash-language-server", "start" }
-        }
-
-        lspconfig.pylsp.setup {
+        vim.lsp.config("pylsp", {
                 cmd = { "uvx", "--from", "python-lsp-server", "pylsp" }
-        }
+        })
 
-        lspconfig.tinymist.setup {
+        vim.lsp.config("clangd", {})
+
+        vim.lsp.config("bashls", {
+                cmd = { "bunx", "--bun", "bash-language-server", "start" }
+        })
+
+        vim.lsp.config("texlab", {})
+        vim.lsp.config("tinymist", {
                 settings = {
                         formatter = "typstyle",
                         exportPdf = "onType",
                         semanticTokens = "disable"
                 }
-        }
-
-        vim.lsp.config("clangd", {})
-        vim.lsp.config("texlab", {})
+        })
         vim.lsp.config("lua_ls", {})
 
-        vim.lsp.enable({"clangd", "texlab", "lua_ls"})
+        vim.filetype.add({
+                extension = {
+                        mlog = "mlog",
+                        masm = "masm"
+                }
+        })
+        vim.lsp.config("mlogls", {
+                filetypes = {"mlog", "masm"},
+                cmd = { "mlogls", "--stdio" }
+        })
+
+        vim.lsp.enable({"ts_ls", "html", "cssls", "jsonls", "pylsp", "bashls", "clangd", "texlab", "lua_ls", "mlogls"})
 end)
 Pkg.load("lspconfig")
 
